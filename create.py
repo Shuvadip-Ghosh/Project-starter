@@ -1,4 +1,4 @@
-rom pyfiglet import figlet_format
+from pyfiglet import figlet_format
 import time
 import sys
 import os
@@ -64,6 +64,7 @@ def creator(op, g,repo_name):
         driver.find_element_by_id('repository_auto_init').click()
         driver.find_element_by_id('repository_auto_init').click()
         driver.find_element_by_xpath('//*[@id="new_repository"]/div[4]/button').click()
+        
         time.sleep(2)
         get_url = driver.current_url
         print(get_url)
@@ -79,9 +80,8 @@ def creator(op, g,repo_name):
             os.system("cls")
         print(figlet_format("Shuvadip Ghosh", font="standard"))
         print(figlet_format("Done", font="pepper"))
-        
 
-    
+
     if g == "no":
         os.system("git init")
         os.system("git add .")
