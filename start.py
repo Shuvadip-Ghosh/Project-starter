@@ -1,6 +1,7 @@
 import time
 import os
 import json
+import argparse
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Chrome,Edge,Firefox,ChromeOptions,EdgeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,10 +9,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class Create():
-	def __init__(self):
-		self.reponame = "asi"
-		self.description = "something"
-		self.stat = False
+	def __init__(self,rpname,desc,st):
+		self.reponame = rpname.replace(" ","-")
+		self.description = desc
+		self.pr = st
 		self.condirec = ""
 		self.browser = ""
 
@@ -67,12 +68,12 @@ class Create():
 			
 			if os.path.exists(os.path.join(self.condirec,self.reponame)):
 				print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
-			# else:
-				# try:
-				# 	self.createLocal()
-				# except:
-				# 	print("There was a problem creating the Local repository")
-				# 	sys.exit(0)
+			else:
+				try:
+					self.createLocal()
+				except:
+					print("There was a problem creating the Local repository")
+					sys.exit(0)
 
 				try:
 					self.browserSelect()
@@ -105,17 +106,18 @@ class Create():
 		reponame = self.driver.find_element(By.XPATH, '//*[@id=":r3:"]').send_keys(self.reponame) 
 		desc = self.driver.find_element(By.XPATH, '//*[@id=":r4:"]').send_keys(self.description) 
 
-		if self.stat:
-			# public
-			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r6:'))).click()
-		else:
+		if self.pr:
 			# private
 			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r7:'))).click()
+		else:
+			# public
+			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r6:'))).click()
 
 		# create button
+		time.sleep(1)
 		self.driver.find_element(By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button').click()
 		# WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button'))).click()
-		# WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
+		WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
 		get_url = self.driver.current_url
 		self.driver.close()
 
@@ -124,5 +126,15 @@ class Create():
 		os.system('git commit -m "First Commit"')
 		os.system("git push -u origin master")
 
-Create()
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument('-n','--reponame',nargs=1,help="The name of the repository we have to create")
+	parser.add_argument('-d','--description',nargs=1,help="The description of the repository we have to create")
+	parser.add_argument('-pr','--private',action='store_true',help="To make the private repository")
+
+	args = parser.parse_args()
+
+
+	Create(args.reponame[0],args.description[0],args.private)
 
