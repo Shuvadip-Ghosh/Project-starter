@@ -1,5 +1,6 @@
 import time
 import os
+import argparse
 import json
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Chrome,Edge,Firefox,ChromeOptions,EdgeOptions
@@ -8,12 +9,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class Create():
-	def __init__(self):
-		self.reponame = "asi"
-		self.description = "something"
-		self.stat = False
-		self.condirec = ""
-		self.browser = ""
+	def __init__(self,rpname,desc,st):
+		self.reponame = rpname.replace(" ","-")
+		self.description = desc
+		self.stat = st
 
 		self.data = json.load(open("data.json"))
 
@@ -55,32 +54,49 @@ class Create():
 					break
 				else:
 					continue
-				
-			print("\nYou selected :- ",data["browserwithgithublogin"]," browser")
+			
+			self.browser = self.data["browserwithgithublogin"]
+			self.condirec = self.data["defaultdirectory"]
+
+			print("\nYou selected :- ",self.data["browserwithgithublogin"]," browser")
 			self.data["firsttime"] = False
-			json_object = json.dumps(data, indent=4)
+			json_object = json.dumps(self.data, indent=4)
 			with open("data.json", "w") as outfile:
 				outfile.write(json_object)
-		else:
-			self.condirec = self.data["defaultdirectory"]
-			self.browser = self.data["browserwithgithublogin"]
+
+		self.condirec = self.data["defaultdirectory"]
+		self.browser = self.data["browserwithgithublogin"]
 			
-			if os.path.exists(os.path.join(self.condirec,self.reponame)):
-				print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
-			# else:
-				# try:
-				# 	self.createLocal()
-				# except:
-				# 	print("There was a problem creating the Local repository")
-				# 	sys.exit(0)
+		if os.path.exists(os.path.join(self.condirec,self.reponame)):
+			print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
+		else:
+			# try:
+			# 	self.browserSelect()
+			# except:
+			# 	print("There was a problem with ur browser . If this continues please drop an isseu at the github repo.")
 
-				try:
-					self.browserSelect()
-					self.createRemote()
-				except:
-					print("There was a problem creating the Remote repository")
+			# try:
+			# 	self.createLocal()
+			# except:
+				# print("There was a problem creating the Local repository")
+				# sys.exit(0)
 
-	def browserSelect(self):
+			try:
+				self.createRemote()
+			except Exception as e:
+				print(e)
+				print("There was a problem in creating the Remote repository")
+
+
+		
+	def createLocal(self):
+		os.chdir(self.condirec)
+		os.mkdir(os.path.join(self.condirec,self.reponame))
+		os.chdir(os.path.join(self.condirec,self.reponame))
+		os.system("git init")
+		os.system("type null > Readme.md")
+
+	def createRemote(self):
 		if self.browser == "Chrome":
 			chrome_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Google\\Chrome\\User Data"
 			options = ChromeOptions()
@@ -92,20 +108,12 @@ class Create():
 			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge Dev\\User Data"
 			self.driver = Edge()
 
-	def createLocal(self):
-		os.chdir(self.condirec)
-		os.mkdir(os.path.join(self.condirec,self.reponame))
-		os.chdir(os.path.join(self.condirec,self.reponame))
-		os.system("git init")
-		os.system("type null > Readme.md")
 
-	def createRemote(self):
-		self.driver.get("https://github.com/new")
 
 		reponame = self.driver.find_element(By.XPATH, '//*[@id=":r3:"]').send_keys(self.reponame) 
 		desc = self.driver.find_element(By.XPATH, '//*[@id=":r4:"]').send_keys(self.description) 
 
-		if self.stat:
+		if self.stat == False:
 			# public
 			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r6:'))).click()
 		else:
@@ -113,9 +121,9 @@ class Create():
 			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r7:'))).click()
 
 		# create button
-		self.driver.find_element(By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button').click()
-		# WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button'))).click()
-		# WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
+		# self.driver.find_element(By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button').click()
+		WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button'))).click()
+		WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
 		get_url = self.driver.current_url
 		self.driver.close()
 
@@ -124,5 +132,16 @@ class Create():
 		os.system('git commit -m "First Commit"')
 		os.system("git push -u origin master")
 
-Create()
+
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument('-n','--reponame',nargs=1,help="The name of the repository we have to create")
+	parser.add_argument('-d','--description',nargs=1,help="The description of the repository we have to create")
+	parser.add_argument('-pr','--private',action='store_true',help="To make the private repository")
+
+	args = parser.parse_args()
+
+
+	Create(args.reponame[0],args.description[0],args.private)
 

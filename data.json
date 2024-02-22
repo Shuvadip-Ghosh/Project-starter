@@ -1,5 +1,5 @@
 {
-    "firsttime": true,
-    "defaultdirectory": "",
-    "browserwithgithublogin": ""
+    "firsttime": false,
+    "defaultdirectory": "G:/python",
+    "browserwithgithublogin": "Chrome"
 }
