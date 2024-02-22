@@ -70,15 +70,17 @@ class Create():
 				print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
 			else:
 				try:
-					self.createLocal()
+					pass
+					# self.createLocal()
 				except:
 					print("There was a problem creating the Local repository")
-					sys.exit(0)
+					quit()
 
 				try:
 					self.browserSelect()
 					self.createRemote()
-				except:
+				except Exception as e:
+					print(e)
 					print("There was a problem creating the Remote repository")
 
 	def browserSelect(self):
@@ -105,6 +107,15 @@ class Create():
 
 		reponame = self.driver.find_element(By.XPATH, '//*[@id=":r3:"]').send_keys(self.reponame) 
 		desc = self.driver.find_element(By.XPATH, '//*[@id=":r4:"]').send_keys(self.description) 
+
+		while True:
+			st = self.driver.find_element(By.XPATH,'/html/body/div[1]/div[6]/main/react-app/div/form/div[3]/div[1]/div[1]/div[1]/fieldset/div/div[2]/span[2]').get_attribute('innerHTML')
+			if "already exists" in st:
+				print("A remote repository with the same name exists. Please try again with a different repo name.")
+				quit()
+			elif "is available." in st:
+				break
+
 
 		if self.pr:
 			# private
