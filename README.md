@@ -1,47 +1,43 @@
 
 # Github Automator
+This is a project that makes your starting of the project smooth.
 
-This ia a project that makes your starting of the project smooth.
-
-
-For Instance As a programmer while stating a project we first 
-
-make a folder 
-
-Initialise the git repository 
-
-then make a readme file 
-
-go to github and create a new repository 
-
-copy the remote
-
-add it as origin 
-
-and then start our coding process 
-
-
-but with the help of the project you can just run the create.py file and it does all it for you
-
-and by the time it does the work you can make some coffee.
-
-
-
-
-## Things You have to change before you can use it
-
-Change all the credentials according to your needs listed from lines 9 to 15 in the create.py file.
- 
-The Github Username and password is required to login to Github.
-
-And make sure to give the email that is used to create your Github account. 
-It is needed to get the verification code which Github Sometimes askes at the time of login.
-
-And then run this and you are done
-
-
-Note that till now this only works for Windows and the linux version will also be comming soon.
-```bash
-  python create.py
+### Starting of a NOOB programmer
+```markdown
+1. make a folder 
+2. Initialise the git repository 
+3. then make a readme file 
+4. go to github and create a new repository 
+5. copy the remote
+6. add it as origin 
+7. and then start coding 
 ```
 
+### Starting of a COOL programmer
+```bash
+python start.py -n <repo-name> -d <description-for-repo>
+```
+##### To be cool clone my git repo and set start.py file to path and you are good to go.
+
+### Supported Browsers
+- [x] Chrome
+### Work going on
+- [ ] Edge
+- [ ] FireFox
+- [ ] Safari
+- [ ] Opera
+
+### Other Options
+```markdown
+1. -pr add this flag to make the remote repo private 
+```
+```bash
+python start.py -n <repo-name> -d <description-for-repo> -pr
+```
+  .
+```markdown
+2. update_data to update the directory where your newly created repo will be kept on your machine and the browser where your github account is logged in.
+```
+```bash
+python start.py update_data
+```
