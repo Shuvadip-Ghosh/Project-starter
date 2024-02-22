@@ -1,6 +1,7 @@
 
 # Github Automator
-This is a project that makes your starting of the project smooth.
+This is a project that makes your starting of the project smooth.  
+Currently only works for windows.
 
 ### Starting of a NOOB programmer
 ```markdown
@@ -19,16 +20,14 @@ python start.py -n <repo-name> -d <description-for-repo>
 ```
 ##### To be cool clone my git repo and set start.py file to path and you are good to go.
 
-### Supported Browsers
-- [x] Chrome
-- [x] Edge
-- [x] Edge Dev
-### Work going on
-- [ ] FireFox
-- [ ] Safari
-- [ ] Opera
+### Installation
+```bash
+git clone https://github.com/Shuvadip-Ghosh/Project-starter.git
+python setup.py
+```
+##### now run the start file with required arguments nd you are good to go
 
-### Other Options
+### Options
 ```markdown
 1. -pr add this flag to make the remote repo private 
 ```
@@ -41,4 +40,17 @@ python start.py -n <repo-name> -d <description-for-repo> -pr
 ```
 ```bash
 python start.py update_data
+```
+
+### Supported Browsers
+```markdown
+1. Chrome
+2. Edge
+3. Edge Dev
+```
+### Work going on
+```markdown
+1. FireFox
+2. Safari
+3. Opera
 ```

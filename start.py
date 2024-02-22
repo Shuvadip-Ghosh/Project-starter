@@ -3,7 +3,7 @@ import os
 import json
 import argparse
 from selenium.webdriver.common.by import By
-from selenium.webdriver import Chrome,Edge,Firefox,ChromeOptions,EdgeOptions
+from selenium.webdriver import Chrome,Edge,Firefox,ChromeOptions,EdgeOptions,FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -35,8 +35,8 @@ class Create():
 			print("2. Edge")
 			print("3. Edge Dev")
 			print("4. Firefox")
-			print("5. Safari")
-			print("6. Opera")
+			print("5. Opera")
+			print("6. Safari")
 			print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 			while True:
 				inp = int(input("Just type the option number >> "))
@@ -53,10 +53,10 @@ class Create():
 					self.data["browserwithgithublogin"] = "Firefox"
 					break
 				elif inp == 5:
-					self.data["browserwithgithublogin"] = "Safari"
+					self.data["browserwithgithublogin"] = "Opera"
 					break
 				elif inp == 6:
-					self.data["browserwithgithublogin"] = "Opera"
+					self.data["browserwithgithublogin"] = "Safari"
 					break
 				else:
 					continue
@@ -107,6 +107,13 @@ class Create():
 			options.add_argument(f"user-data-dir={edge_profile_path}")
 			options.add_argument('--profile-directory=Default')
 			self.driver = Edge()
+
+		if self.browser == "Firefox":
+			firefox_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Mozilla\\Firefox\\Profiles"
+			# options = FirefoxOptions()
+			# options.add_argument(f"user-data-dir={firefox_profile_path}")
+			# options.add_argument('--profile-directory=kx5nckvd.default')
+			self.driver = Firefox()
 
 	def createRemote(self):
 		self.driver.get("https://github.com/new")
@@ -191,28 +198,28 @@ if __name__ == "__main__":
 		print("2. Edge")
 		print("3. Edge Dev")
 		print("4. Firefox")
-		print("5. Safari")
-		print("6. Opera")
+		print("5. Opera")
+		print("6. Safari")
 		print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 		while True:
 				inp = int(input("Just type the option number >> "))
 				if inp == 1:
-					self.data["browserwithgithublogin"] = "Chrome"
+					data["browserwithgithublogin"] = "Chrome"
 					break
 				elif inp == 2:
-					self.data["browserwithgithublogin"] = "Edge"
+					data["browserwithgithublogin"] = "Edge"
 					break
 				elif inp == 3:
-					self.data["browserwithgithublogin"] = "Edge Dev"
+					data["browserwithgithublogin"] = "Edge Dev"
 					break
 				elif inp == 4:
-					self.data["browserwithgithublogin"] = "Firefox"
+					data["browserwithgithublogin"] = "Firefox"
 					break
 				elif inp == 5:
-					self.data["browserwithgithublogin"] = "Safari"
+					data["browserwithgithublogin"] = "Opera"
 					break
 				elif inp == 6:
-					self.data["browserwithgithublogin"] = "Opera"
+					data["browserwithgithublogin"] = "Safari"
 					break
 				else:
 					continue
