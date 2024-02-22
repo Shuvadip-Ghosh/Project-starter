@@ -70,18 +70,17 @@ class Create():
 				print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
 			else:
 				try:
-					pass
-					# self.createLocal()
-				except:
-					print("There was a problem creating the Local repository")
-					quit()
-
-				try:
 					self.browserSelect()
 					self.createRemote()
 				except Exception as e:
-					print(e)
 					print("There was a problem creating the Remote repository")
+
+	def createLocal(self):
+		os.chdir(self.condirec)
+		os.mkdir(os.path.join(self.condirec,self.reponame))
+		os.chdir(os.path.join(self.condirec,self.reponame))
+		os.system("git init")
+		os.system("type null > Readme.md")
 
 	def browserSelect(self):
 		if self.browser == "Chrome":
@@ -95,13 +94,6 @@ class Create():
 			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge Dev\\User Data"
 			self.driver = Edge()
 
-	def createLocal(self):
-		os.chdir(self.condirec)
-		os.mkdir(os.path.join(self.condirec,self.reponame))
-		os.chdir(os.path.join(self.condirec,self.reponame))
-		os.system("git init")
-		os.system("type null > Readme.md")
-
 	def createRemote(self):
 		self.driver.get("https://github.com/new")
 
@@ -109,14 +101,18 @@ class Create():
 		desc = self.driver.find_element(By.XPATH, '//*[@id=":r4:"]').send_keys(self.description) 
 
 		while True:
-			st = self.driver.find_element(By.XPATH,'/html/body/div[1]/div[6]/main/react-app/div/form/div[3]/div[1]/div[1]/div[1]/fieldset/div/div[2]/span[2]').get_attribute('innerHTML')
-			break
-			# if "already exists" in st:
-			# 	print("A remote repository with the same name exists. Please try again with a different repo name.")
-			# 	quit()
-			# 	break
-			# elif "is available." in st:
-			# 	break
+			try:
+				st = self.driver.find_element(By.XPATH,'/html/body/div[1]/div[6]/main/react-app/div/form/div[3]/div[1]/div[1]/div[1]/fieldset/div/div[2]/span[2]').get_attribute('innerHTML')
+				if "already exists" in str(st):
+					print("A remote repository with the same name exists. Please try again with a different repo name.")
+					st = False
+					break
+				elif "is available." in st:
+					break
+			except:
+				continue
+		if not st:
+			quit()
 
 
 		time.sleep(0.5)
@@ -134,6 +130,12 @@ class Create():
 		WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
 		get_url = self.driver.current_url
 		self.driver.close()
+
+		try:
+			self.createLocal()
+		except:
+			print("There was a problem creating the Local repository")
+			quit()
 
 		os.system("git add .")
 		os.system(f"git remote add origin {get_url}.git")
