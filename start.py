@@ -33,9 +33,10 @@ class Create():
 			print("\nPlease select the browser where your github is logged in!!!!")
 			print("1. Chrome")
 			print("2. Edge")
-			print("3. Firefox")
-			print("4. Safari")
-			print("5. Opera")
+			print("3. Edge Dev")
+			print("4. Firefox")
+			print("5. Safari")
+			print("6. Opera")
 			print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 			while True:
 				inp = int(input("Just type the option number >> "))
@@ -46,12 +47,15 @@ class Create():
 					self.data["browserwithgithublogin"] = "Edge"
 					break
 				elif inp == 3:
-					self.data["browserwithgithublogin"] = "Firefox"
+					self.data["browserwithgithublogin"] = "Edge Dev"
 					break
 				elif inp == 4:
-					self.data["browserwithgithublogin"] = "Safari"
+					self.data["browserwithgithublogin"] = "Firefox"
 					break
 				elif inp == 5:
+					self.data["browserwithgithublogin"] = "Safari"
+					break
+				elif inp == 6:
 					self.data["browserwithgithublogin"] = "Opera"
 					break
 				else:
@@ -91,7 +95,17 @@ class Create():
 			self.driver = Chrome(options=options)
 
 		if self.browser == "Edge":
+			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge\\User Data"
+			options = EdgeOptions()
+			options.add_argument(f"user-data-dir={edge_profile_path}")
+			options.add_argument('--profile-directory=Default')
+			self.driver = Edge()
+
+		if self.browser == "Edge Dev":
 			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge Dev\\User Data"
+			options = EdgeOptions()
+			options.add_argument(f"user-data-dir={edge_profile_path}")
+			options.add_argument('--profile-directory=Default')
 			self.driver = Edge()
 
 	def createRemote(self):
@@ -175,29 +189,33 @@ if __name__ == "__main__":
 		print("\nPlease select the browser where your github is logged in!!!!")
 		print("1. Chrome")
 		print("2. Edge")
-		print("3. Firefox")
-		print("4. Safari")
-		print("5. Opera")
+		print("3. Edge Dev")
+		print("4. Firefox")
+		print("5. Safari")
+		print("6. Opera")
 		print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 		while True:
-			inp = int(input("Just type the option number >> "))
-			if inp == 1:
-				data["browserwithgithublogin"] = "Chrome"
-				break
-			elif inp == 2:
-				data["browserwithgithublogin"] = "Edge"
-				break
-			elif inp == 3:
-				data["browserwithgithublogin"] = "Firefox"
-				break
-			elif inp == 4:
-				data["browserwithgithublogin"] = "Safari"
-				break
-			elif inp == 5:
-				data["browserwithgithublogin"] = "Opera"
-				break
-			else:
-				continue
+				inp = int(input("Just type the option number >> "))
+				if inp == 1:
+					self.data["browserwithgithublogin"] = "Chrome"
+					break
+				elif inp == 2:
+					self.data["browserwithgithublogin"] = "Edge"
+					break
+				elif inp == 3:
+					self.data["browserwithgithublogin"] = "Edge Dev"
+					break
+				elif inp == 4:
+					self.data["browserwithgithublogin"] = "Firefox"
+					break
+				elif inp == 5:
+					self.data["browserwithgithublogin"] = "Safari"
+					break
+				elif inp == 6:
+					self.data["browserwithgithublogin"] = "Opera"
+					break
+				else:
+					continue
 			
 		print("\nYou selected :-",data["browserwithgithublogin"],"browser")
 		json_object = json.dumps(data, indent=4)

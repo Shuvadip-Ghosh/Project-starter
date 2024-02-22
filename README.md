@@ -21,8 +21,9 @@ python start.py -n <repo-name> -d <description-for-repo>
 
 ### Supported Browsers
 - [x] Chrome
+- [x] Edge
+- [x] Edge Dev
 ### Work going on
-- [ ] Edge
 - [ ] FireFox
 - [ ] Safari
 - [ ] Opera
