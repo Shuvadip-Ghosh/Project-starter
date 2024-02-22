@@ -110,13 +110,16 @@ class Create():
 
 		while True:
 			st = self.driver.find_element(By.XPATH,'/html/body/div[1]/div[6]/main/react-app/div/form/div[3]/div[1]/div[1]/div[1]/fieldset/div/div[2]/span[2]').get_attribute('innerHTML')
-			if "already exists" in st:
-				print("A remote repository with the same name exists. Please try again with a different repo name.")
-				quit()
-			elif "is available." in st:
-				break
+			break
+			# if "already exists" in st:
+			# 	print("A remote repository with the same name exists. Please try again with a different repo name.")
+			# 	quit()
+			# 	break
+			# elif "is available." in st:
+			# 	break
 
 
+		time.sleep(0.5)
 		if self.pr:
 			# private
 			WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, ':r7:'))).click()
