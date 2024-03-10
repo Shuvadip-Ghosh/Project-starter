@@ -87,33 +87,33 @@ class Create():
 		os.system("type null > Readme.md")
 
 	def browserSelect(self):
-		if self.browser == "Chrome":
+		if "Chrome" in self.browser:
 			chrome_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Google\\Chrome\\User Data"
 			options = ChromeOptions()
 			options.add_argument(f"user-data-dir={chrome_profile_path}")
 			options.add_argument('--profile-directory=Default')
 			self.driver = Chrome(options=options)
-
-		if self.browser == "Edge":
-			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge\\User Data"
-			options = EdgeOptions()
-			options.add_argument(f"user-data-dir={edge_profile_path}")
-			options.add_argument('--profile-directory=Default')
-			self.driver = Edge()
-
-		if self.browser == "Edge Dev":
+		
+		elif "Edge Dev" in self.browser:
 			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge Dev\\User Data"
 			options = EdgeOptions()
 			options.add_argument(f"user-data-dir={edge_profile_path}")
 			options.add_argument('--profile-directory=Default')
-			self.driver = Edge()
-
-		if self.browser == "Firefox":
-			firefox_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Mozilla\\Firefox\\Profiles"
-			# options = FirefoxOptions()
-			# options.add_argument(f"user-data-dir={firefox_profile_path}")
-			# options.add_argument('--profile-directory=kx5nckvd.default')
-			self.driver = Firefox()
+			self.driver = Edge(options=options)			
+		
+		elif "Edge" in self.browser:
+			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge\\User Data"
+			options = EdgeOptions()
+			options.add_argument(f"user-data-dir={edge_profile_path}")
+			options.add_argument('--profile-directory=Default')
+			self.driver = Edge(options=options) 
+		
+		# elif self.browser == "Firefox":
+		# 	firefox_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Mozilla\\Firefox\\Profiles"
+		# 	# options = FirefoxOptions()
+		# 	# options.add_argument(f"user-data-dir={firefox_profile_path}")
+		# 	# options.add_argument('--profile-directory=kx5nckvd.default')
+		# 	self.driver = Firefox()
 
 	def createRemote(self):
 		self.driver.get("https://github.com/new")
