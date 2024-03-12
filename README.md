@@ -39,18 +39,16 @@ python start.py -n <repo-name> -d <description-for-repo> -pr
 2. update_data to update the directory where your newly created repo will be kept on your machine and the browser where your github account is logged in.
 ```
 ```bash
-python start.py update_data
+python start.py -upd
 ```
 
 ### Supported Browsers
 ```markdown
 1. Chrome
 2. Edge
-3. Edge Dev
+3. FireFox
 ```
 ### Work going on
 ```markdown
-1. FireFox
-2. Safari
-3. Opera
+1. Edge Dev
 ```
