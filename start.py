@@ -34,8 +34,7 @@ class Create():
 			print("\nPlease select the browser where your github is logged in!!!!")
 			print("1. Chrome")
 			print("2. Edge")
-			print("3. Edge Dev")
-			print("4. Firefox")
+			print("3. Firefox")
 			print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 			while True:
 				inp = int(input("Just type the option number >> "))
@@ -46,9 +45,6 @@ class Create():
 					self.data["browserwithgithublogin"] = "Edge"
 					break
 				elif inp == 3:
-					self.data["browserwithgithublogin"] = "Edge Dev"
-					break
-				elif inp == 4:
 					self.data["browserwithgithublogin"] = "Firefox"
 					break
 				else:
@@ -71,8 +67,20 @@ class Create():
 				self.browserSelect()
 				self.createRemote()
 			except Exception as e:
-				print("There was a problem creating the Remote repository")
-				print(e)
+				print("--------------------------------------------------------------------")
+				print("There was a problem creating the Remote repository. Trying again....")
+				print("--------------------------------------------------------------------")
+				os.system("taskkill /f /im msedge.exe")
+				try:
+					self.browserSelect()
+					self.createRemote()
+				except Exception as e:
+					print("--------------------------------------------------------------------")
+					print("There was a problem creating the Remote repository. Please try again later. If the issue persists create an issue at our official github.")
+					print("github:- \"https://github.com/Shuvadip-Ghosh/Project-starter/issues\"")
+					print("--------------------------------------------------------------------")
+					print(e)
+					exit(0)
 
 	def createLocal(self):
 		os.chdir(self.condirec)
@@ -88,15 +96,7 @@ class Create():
 			options.add_argument(f"user-data-dir={chrome_profile_path}")
 			options.add_argument('--profile-directory=Default')
 			self.driver = Chrome(options=options)
-		
-		elif "Edge Dev" in self.browser:
-			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge Dev\\User Data"
-			options = EdgeOptions()
-			options.add_argument(f"user-data-dir={edge_profile_path}")
-			options.add_argument('--profile-directory=Default')
-			self.driver = Edge(options=options)	
-			time.sleep(12)	
-		
+				
 		elif "Edge" in self.browser:
 			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge\\User Data"
 			options = EdgeOptions()
@@ -141,6 +141,7 @@ class Create():
 		# create button
 		time.sleep(1)
 		self.driver.find_element(By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button').click()
+
 		# WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[6]/main/react-app/div/form/div[5]/button'))).click()
 		WebDriverWait(self.driver, 20).until(lambda driver: self.driver.current_url != "https://github.com/new")
 		get_url = self.driver.current_url
@@ -191,8 +192,7 @@ if __name__ == "__main__":
 		print("\nPlease select the browser where your github is logged in!!!!")
 		print("1. Chrome")
 		print("2. Edge")
-		print("3. Edge Dev")
-		print("4. Firefox")
+		print("3. Firefox")
 		print("If ur browser is not listed here please create an issue demanding the support for your browser.")
 		while True:
 				inp = int(input("Just type the option number >> "))
@@ -203,9 +203,6 @@ if __name__ == "__main__":
 					data["browserwithgithublogin"] = "Edge"
 					break
 				elif inp == 3:
-					data["browserwithgithublogin"] = "Edge Dev"
-					break
-				elif inp == 4:
 					data["browserwithgithublogin"] = "Firefox"
 					break
 				else:

@@ -48,7 +48,3 @@ python start.py -upd
 2. Edge
 3. FireFox
 ```
-### Work going on
-```markdown
-1. Edge Dev
-```
