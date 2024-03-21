@@ -10,57 +10,21 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class Create():
-	def __init__(self,rpname,desc,st):
+	def __init__(self,rpname="",desc="",st=False,upd=False):
 		self.reponame = rpname.replace(" ","-")
 		self.description = desc
 		self.pr = st
-		self.condirec = ""
-		self.browser = ""
 
 		self.data = json.load(open("data.json"))
+		if upd:
+			self.updateData()
+			exit(0)
 
 		if self.data['firsttime']:
 			print("Since this is ur first time. Please submit the following data")
-
-			print("Please select the directory where u want to keep the local part of your repo")
-			time.sleep(3)
-			from tkinter import filedialog,Tk
-			root = Tk()
-			root.withdraw()
-			folder_selected = filedialog.askdirectory()
-			self.data["defaultdirectory"] = folder_selected
-			print("\nThe folder u selected is :- ",folder_selected)
-			
-			print("\nPlease select the browser where your github is logged in!!!!")
-			print("1. Chrome")
-			print("2. Edge")
-			print("3. Firefox")
-			print("If ur browser is not listed here please create an issue demanding the support for your browser.")
-			while True:
-				inp = int(input("Just type the option number >> "))
-				if inp == 1:
-					self.data["browserwithgithublogin"] = "Chrome"
-					break
-				elif inp == 2:
-					self.data["browserwithgithublogin"] = "Edge"
-					break
-				elif inp == 3:
-					self.data["browserwithgithublogin"] = "Firefox"
-					break
-				else:
-					print("Wrong input please try again...")
-					continue
-				
-			print("\nYou selected :- ",self.data["browserwithgithublogin"]," browser")
-			self.data["firsttime"] = False
-			json_object = json.dumps(self.data, indent=4)
-			with open("data.json", "w") as outfile:
-				outfile.write(json_object)
+			self.updateData()
 		
-		self.condirec = self.data["defaultdirectory"]
-		self.browser = self.data["browserwithgithublogin"]
-		
-		if os.path.exists(os.path.join(self.condirec,self.reponame)):
+		if os.path.exists(os.path.join(self.data["defaultdirectory"],self.reponame)):
 			print("A local repository with the same name exists in the directory. Please try again with a different repo name.")
 		else:
 			try:
@@ -70,43 +34,103 @@ class Create():
 				print("--------------------------------------------------------------------")
 				print("There was a problem creating the Remote repository. Trying again....")
 				print("--------------------------------------------------------------------")
-				os.system("taskkill /f /im msedge.exe")
-				try:
-					self.browserSelect()
-					self.createRemote()
-				except Exception as e:
-					print("--------------------------------------------------------------------")
-					print("There was a problem creating the Remote repository. Please try again later. If the issue persists create an issue at our official github.")
-					print("github:- \"https://github.com/Shuvadip-Ghosh/Project-starter/issues\"")
-					print("--------------------------------------------------------------------")
-					print(e)
-					exit(0)
+
+				if "Edge" in self.data["browserwithgithublogin"]:
+					os.system("taskkill /f /im msedge.exe")
+					try:
+						self.browserSelect()
+						self.createRemote()
+					except Exception as e:
+						print("--------------------------------------------------------------------")
+						print("There was a problem creating the Remote repository. Please try again later.\nIf the issue persists create an issue at our official github.")
+						print("github:- \"https://github.com/Shuvadip-Ghosh/Project-starter/issues\"")
+						print("--------------------------------------------------------------------")
+						print(e)
+					
+				exit(0)
+
+
+		print("----------------------------------")
+		print("Your repository has been created.")
+		print("----------------------------------")
+
+	def updateData(self):
+		print("Please select the directory where u want to keep the local part of your repo")
+		time.sleep(3)
+		from tkinter import filedialog,Tk
+		root = Tk()
+		root.withdraw()
+		folder_selected = filedialog.askdirectory()
+		self.data["defaultdirectory"] = folder_selected
+				
+		print("\nPlease select the browser where your github is logged in!!!!")
+		print("1. Chrome")
+		print("2. Edge")
+		print("3. Firefox")
+		print("If ur browser is not listed here please create an issue demanding the support for your browser.")
+		while True:
+			inp = int(input("Just type the option number >> "))
+			if inp == 1:
+				self.data["browserwithgithublogin"] = "Chrome"
+				print("Please visit this url \"chrome://version/\" and copy the profile path here.")
+				profile_path = input(">>")
+				break
+			elif inp == 2:
+				self.data["browserwithgithublogin"] = "Edge"
+				print("Please visit this url \"edge://version/\" and copy the profile path here.")
+				profile_path = input(">>")
+				break
+			elif inp == 3:
+				self.data["browserwithgithublogin"] = "Firefox"
+				print("Please visit this url \"about:profiles\" and copy the profile path (Root folder) here.")
+				profile_path = input(">>")
+				break
+			else:
+				print("Wrong input please try again...")
+				continue
+
+
+		print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+		print("\nThe folder u selected is :- ",folder_selected)
+		print("\nYou selected :- ",self.data["browserwithgithublogin"]," browser")
+		print("\nYou entered profile path :- ",profile_path)
+		print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
+		self.data["firsttime"] = False
+		self.data["profilePathDir"] = profile_path[0:profile_path.rindex("\\")]
+		self.data["profileName"] = profile_path[profile_path.rindex("\\")+1:]
+
+		json_object = json.dumps(self.data, indent=4)
+		with open("data.json", "w") as outfile:
+			outfile.write(json_object)
 
 	def createLocal(self):
-		os.chdir(self.condirec)
-		os.mkdir(os.path.join(self.condirec,self.reponame))
-		os.chdir(os.path.join(self.condirec,self.reponame))
+		os.chdir(self.data["defaultdirectory"])
+		os.mkdir(os.path.join(self.data["defaultdirectory"],self.reponame))
+		os.chdir(os.path.join(self.data["defaultdirectory"],self.reponame))
 		os.system("git init")
 		os.system("type null > Readme.md")
 
 	def browserSelect(self):
-		if "Chrome" in self.browser:
-			chrome_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Google\\Chrome\\User Data"
+		if "Chrome" in self.data["browserwithgithublogin"]:
+			chrome_profile_dir = self.data["profilePathDir"]
+			chrome_profile_name = self.data["profileName"]
 			options = ChromeOptions()
-			options.add_argument(f"user-data-dir={chrome_profile_path}")
-			options.add_argument('--profile-directory=Default')
+			options.add_argument(f"user-data-dir={chrome_profile_dir}")
+			options.add_argument(f'--profile-directory={chrome_profile_name}')
 			self.driver = Chrome(options=options)
 				
-		elif "Edge" in self.browser:
-			edge_profile_path = f"{os.getenv('LOCALAPPDATA')}\\Microsoft\\Edge\\User Data"
+		elif "Edge" in self.data["browserwithgithublogin"]:
+			edge_profile_path = self.data["profilePathDir"]
+			edge_profile_name = self.data["profileName"]
 			options = EdgeOptions()
 			options.add_argument(f"user-data-dir={edge_profile_path}")
-			options.add_argument('--profile-directory=Default')
+			options.add_argument(f'--profile-directory={edge_profile_name}')
 			self.driver = Edge(options=options) 
 		
-		elif self.browser == "Firefox":
+		elif self.data["browserwithgithublogin"] == "Firefox":
 			options = Options()
-			options.profile = f"{os.getenv('APPDATA')}\\Mozilla\\Firefox\\Profiles\\im2zii8g.default-release"
+			options.profile = self.data["profilePathDir"]+"\\"+self.data["profileName"]
 			self.driver = Firefox(options=options)
 
 	def createRemote(self):
@@ -177,39 +201,6 @@ if __name__ == "__main__":
 	if args.reponame is not None and args.description is not None:
 		Create(args.reponame[0],args.description[0],args.private)
 
-
 	if args.update_data:
-		data = {"firsttime": False,"defaultdirectory": "","browserwithgithublogin": ""}
-		print("Please select the directory where u want to keep the local part of your repo")
-		time.sleep(3)
-		from tkinter import filedialog,Tk
-		root = Tk()
-		root.withdraw()
-		folder_selected = filedialog.askdirectory()
-		data["defaultdirectory"] = folder_selected
-		print("\nThe folder u selected is :- ",folder_selected)
-		
-		print("\nPlease select the browser where your github is logged in!!!!")
-		print("1. Chrome")
-		print("2. Edge")
-		print("3. Firefox")
-		print("If ur browser is not listed here please create an issue demanding the support for your browser.")
-		while True:
-				inp = int(input("Just type the option number >> "))
-				if inp == 1:
-					data["browserwithgithublogin"] = "Chrome"
-					break
-				elif inp == 2:
-					data["browserwithgithublogin"] = "Edge"
-					break
-				elif inp == 3:
-					data["browserwithgithublogin"] = "Firefox"
-					break
-				else:
-					print("Wrong input please try again...")
-					continue
-			
-		print("\nYou selected :-",data["browserwithgithublogin"],"browser")
-		json_object = json.dumps(data, indent=4)
-		with open("data.json", "w") as outfile:
-			outfile.write(json_object)
+		obj = Create(upd=True)
+		obj.updateData

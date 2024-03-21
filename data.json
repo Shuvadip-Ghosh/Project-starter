@@ -1,5 +1,7 @@
 {
     "firsttime": false,
     "defaultdirectory": "G:/python",
-    "browserwithgithublogin": "Edge"
+    "browserwithgithublogin": "Edge",
+    "profilePathDir": "C:\\Users\\Shuvadip_Ghosh\\AppData\\Local\\Microsoft\\Edge\\User Data",
+    "profileName": "Default"
 }
