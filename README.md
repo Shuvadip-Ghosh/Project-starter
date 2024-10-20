@@ -51,7 +51,7 @@ python start.py -upd
 **Essential Considerations for Optimal Performance:**
 
 - **Prerequisites:** Ensure both Git and Python are installed on your system before running the script.
-- **Security Best Practices:** Choosing the private repository option requires providing your GitHub credentials during script execution. To bolster security, consider utilizing tools like Git Credential Manager for secure credential storage.
 - **Potential for Personalization:** While the script automates the fundamental setup, there's room for further customization to suit your workflow. You could potentially integrate tasks like installing project dependencies or setting up a virtual environment for even greater automation.
+
 
 By incorporating the GitHub Automator into your development process, you'll experience a significantly streamlined and efficient project setup, allowing you to dedicate more time and focus to the core aspects of software development – creating innovative and impactful code.
