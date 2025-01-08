@@ -50,7 +50,7 @@ python start.py -upd
 
 **Essential Considerations for Optimal Performance:**
 
-- **Prerequisites:** Ensure both Git and Python are installed on your system before running the script.
+- **Prerequisites:** Ensure both Git and Python are installed on your system and you are signed in to your github account in the browser you are about to specify and you know the details you are going to be needed during the first time setup before running the script.
 - **Potential for Personalization:** While the script automates the fundamental setup, there's room for further customization to suit your workflow. You could potentially integrate tasks like installing project dependencies or setting up a virtual environment for even greater automation.
 
 
